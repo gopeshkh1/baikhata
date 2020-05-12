@@ -9,13 +9,12 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-const user = require("./routes/user");
-
 app.get("/test", (req, res) => {
   res.end("hello from backend");
 });
 
-app.use("/api/user", user);
+const sales = require("./routes/sales");
+app.use("/api/sales", sales);
 
 app.use(express.static("client/dist"));
 
@@ -24,7 +23,7 @@ app.get("*", (req, res) => {
 });
 
 const port = process.env.PORT || 8000;
-app.listen(port, (err, res) => {
+app.listen(port, "0.0.0.0", (err, res) => {
   if (err) {
     console.log("some error occured while starting the server");
   } else {

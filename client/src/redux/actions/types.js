@@ -1,0 +1,3 @@
+export const ADD_SALE_ENTRY = "ADD_SALE_ENTRY";
+export const FETCH_SALE_DATA = "FETCH_SALE_DATA";
+export const EDIT_SALE_ENTRY = "EDIT_SALE_ENTRY";
