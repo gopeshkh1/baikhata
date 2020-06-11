@@ -36,12 +36,13 @@ function AddEntry(props) {
     products: [],
     other_expenses: [],
     total: 0,
-    entrytype: "sell",
+    sales_type: "sell",
   });
 
   function textAreaChange(e) {
     const value = e.target.value;
     const name = e.target.name;
+    console.log(name);
     setState({ ...state, [name]: value });
   }
 
@@ -86,8 +87,8 @@ function AddEntry(props) {
             <FormControl fullWidth>
               <InputLabel>Select Entry type</InputLabel>
               <Select
-                name="entrytype"
-                value={state.entrytype}
+                name="sales_type"
+                value={state.sales_type}
                 onChange={textAreaChange}
               >
                 <MenuItem value={"sell"}>Sell</MenuItem>
@@ -108,12 +109,7 @@ function AddEntry(props) {
           )}
 
           <Grid item xs={4} container>
-            <TextField
-              name="dealer_name"
-              fullWidth
-              label="Dealer Name"
-              fullWidth
-            />
+            <TextField name="dealer_name" fullWidth label="Dealer Name" />
           </Grid>
 
           <Grid item container spacing={3}>
@@ -217,6 +213,13 @@ function AddEntry(props) {
             <TextField
               name="amt_paid"
               label="Amount Paid"
+              onChange={textAreaChange}
+            />
+          </Grid>
+          <Grid item>
+            <TextField
+              name="remarks"
+              label="Remarks"
               onChange={textAreaChange}
             />
           </Grid>

@@ -8,11 +8,10 @@ import {
   MenuItem,
   AppBar,
 } from "@material-ui/core";
-import AddEntry from "./AddEntry/AddEntry";
+import AddEntry from "./AddEntry/AddEntryNew";
 import DisplayTable from "./Display/DisplayTable";
 import { InputMenuField } from "./AddEntry/CustomizedComp";
 import { Add } from "@material-ui/icons";
-import ToolBar from "./ToolBar";
 
 export default function SellInfo() {
   const [state, setState] = useState({
@@ -25,8 +24,6 @@ export default function SellInfo() {
 
   return (
     <div>
-      <ToolBar />
-      <br />
       <DisplayTable />
       <Fab
         variant="extended"

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
@@ -16,16 +16,65 @@ import {
   CardHeader,
   Grid,
   CardContent,
+  Toolbar,
 } from "@material-ui/core";
 
 import { makeStyles } from "@material-ui/core/styles";
 import DisplayCard from "./DisplayCard";
+import ToolBar from "../ToolBar";
 
 function DisplayTable(props) {
+  const [state, setState] = useState({
+    filters: {
+      dealer_name: "",
+      sales_type: "sell",
+    },
+    rows: [],
+  });
+
+  useEffect(() => {
+    console.log("rows updated...");
+    onFilterList();
+  }, [props.rows]);
+
+  function onFilterList(target) {
+    const filters = state.filters;
+    var newRows = props.rows;
+
+    if (target) {
+      const { name, value } = target;
+      filters[name] = value;
+    }
+
+    for (const key in filters) {
+      if (filters.hasOwnProperty(key)) {
+        switch (key) {
+          case "sales_type":
+            newRows = newRows.filter(
+              (row) => row.sales_type === filters.sales_type
+            );
+
+          case "dealer_name":
+            newRows = newRows.filter((row) =>
+              row.dealer_name.startsWith(filters.dealer_name)
+            );
+            break;
+
+          default:
+            break;
+        }
+      }
+    }
+
+    setState({ ...state, filters, rows: newRows });
+  }
+
   return (
     <div>
+      <ToolBar onFilterList={onFilterList} />
+      <br />
       <Grid container spacing={3}>
-        {props.rows.map((row) => (
+        {state.rows.map((row) => (
           <Grid key={row.id} item xs={6}>
             <DisplayCard row={row} />
           </Grid>

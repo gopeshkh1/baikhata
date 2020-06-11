@@ -9,6 +9,7 @@ const dataType = {
   quantity: "int",
   quintals: "float",
   rate: "int",
+  marka: "int",
 };
 
 const dataFormatter = {
@@ -27,6 +28,7 @@ export default function AddProduct(props) {
     product_type: "",
     product_name: "",
     quantity: 0,
+    marka: 0,
     rate: 0,
     quintals: 0,
   });
@@ -35,6 +37,7 @@ export default function AddProduct(props) {
     quantity: false,
     rate: false,
     quintals: false,
+    marka: false,
   });
 
   function onTextAreaChange(e) {
@@ -102,6 +105,14 @@ export default function AddProduct(props) {
               name="quantity"
               label="Quantity(katti)"
               error={errorFields["quantity"]}
+              onChange={onTextAreaChange}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <TextField
+              name="marka"
+              label="Marka"
+              error={errorFields["marka"]}
               onChange={onTextAreaChange}
             />
           </Grid>

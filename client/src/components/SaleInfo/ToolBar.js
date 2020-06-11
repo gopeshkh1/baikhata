@@ -12,7 +12,7 @@ import {
 
 import SearchIcon from "@material-ui/icons/Search";
 
-export default function ToolBar() {
+export default function ToolBar(props) {
   const classes = makeStyles((theme) => ({
     search: {
       width: 240,
@@ -49,13 +49,16 @@ export default function ToolBar() {
   }))();
 
   const [state, setState] = useState({
-    entrytype: "sell",
+    sales_type: "sell",
   });
 
   const onChange = (e) => {
     const { name, value } = e.target;
-    console.log(name, value);
-    setState({ ...state, [name]: value });
+    if (name === "sales_type") {
+      setState({ ...state, [name]: value });
+    }
+
+    props.onFilterList({ name, value });
   };
   return (
     <AppBar position="relative">
@@ -68,7 +71,7 @@ export default function ToolBar() {
               </Typography>
               <Select
                 name="sales_type"
-                value={state.entrytype}
+                value={state.sales_type}
                 onChange={onChange}
               >
                 <MenuItem value="sell">Sell</MenuItem>

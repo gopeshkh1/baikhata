@@ -5,6 +5,7 @@ var rows = [
   {
     id: "ewtrhueiwd-gfndsjk-qdgdf",
     bill_no: "1",
+    sales_type: "sell",
     date_of_purchase: "2020-10-05",
     dealer_name: "gopesh",
     products: [
@@ -39,8 +40,9 @@ var rows = [
   {
     id: "ghfdsjdwo-dfhjjjs-dfg",
     bill_no: "2",
+    sales_type: "sell",
     date_of_purchase: "2020-10-05",
-    dealer_name: "gopesh",
+    dealer_name: "gopi",
     products: [
       {
         id: "590456513-5-4359423",
@@ -73,8 +75,9 @@ var rows = [
   {
     id: "hjdksf-dfgfhgfdf-gdf",
     bill_no: "3",
+    sales_type: "buy",
     date_of_purchase: "2020-10-05",
-    dealer_name: "gopesh",
+    dealer_name: "dewansh",
     products: [
       {
         id: "590456513-5-4359423",
@@ -107,8 +110,9 @@ var rows = [
   {
     id: "sadfgtf-efddhgf-dfdfg",
     bill_no: "4",
+    sales_type: "sell",
     date_of_purchase: "2020-10-05",
-    dealer_name: "gopesh",
+    dealer_name: "dev",
     products: [
       {
         id: "590456513-5-4359423",
@@ -141,8 +145,9 @@ var rows = [
   {
     id: "asdgfd-fgdfsagds-gfgfd",
     bill_no: "5",
+    sales_type: "buy",
     date_of_purchase: "2020-10-05",
-    dealer_name: "gopesh",
+    dealer_name: "dewa",
     products: [
       {
         id: "590456513-5-4359423",
