@@ -2,22 +2,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import {
-  Typography,
-  Table,
-  TableHead,
-  TableCell,
-  TableBody,
-  TableRow,
-  TableContainer,
-  TablePagination,
-  Paper,
-  Card,
-  CardHeader,
-  Grid,
-  CardContent,
-  Toolbar,
-} from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 
 import { makeStyles } from "@material-ui/core/styles";
 import DisplayCard from "./DisplayCard";
@@ -75,7 +60,7 @@ function DisplayTable(props) {
       <br />
       <Grid container spacing={3}>
         {state.rows.map((row) => (
-          <Grid key={row.id} item xs={6}>
+          <Grid key={row.bill_no} item xs={6}>
             <DisplayCard row={row} />
           </Grid>
         ))}

@@ -1,4 +1,11 @@
-import { SELECT, DATE, STRING, INT, FLOAT, MULTIENTRY } from "./EntryType";
+import {
+  SELECT,
+  DATE,
+  STRING,
+  INT,
+  FLOAT,
+  MULTIENTRY,
+} from "../../CompMap/CompType";
 
 export const columns = [
   [

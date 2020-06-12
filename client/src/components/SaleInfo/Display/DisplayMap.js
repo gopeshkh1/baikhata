@@ -1,37 +1,42 @@
-import { SELECT, DATE, STRING, INT, FLOAT, MULTIENTRY } from "./EntryType";
-
 export const columns = [
+  { id: "date_of_purchase", label: "Date of Purchase", type: "date" },
+  {
+    id: "products",
+    label: "Products",
+    subcolumns: [
+      { id: "product_type", label: "Type", type: "text" },
+      { id: "product_name", label: "Name", type: "text" },
+      { id: "quantity", label: "Katti", type: "text" },
+      { id: "quintals", label: "Quintals", type: "text" },
+      { id: "rate", label: "Rate", type: "text" },
+    ],
+  },
+  {
+    id: "other_expenses",
+    label: "Other expenses",
+    subcolumns: [
+      { id: "expense_type", label: "Type" },
+      { id: "expense_amt", label: "Amount" },
+    ],
+  },
+  { id: "total", label: "Total" },
+  { id: "amt_paid", label: "Amount Paid" },
+];
+
+import { DATE, STRING, INT, FLOAT, MULTIENTRY } from "../../CompMap/CompType";
+export const rows = [
   [
-    {
-      id: "sales_type",
-      label: "Select Entry Type",
-      type: SELECT,
-      list: [
-        { id: "sell", label: "Sell" },
-        { id: "buy", label: "Buy" },
-      ],
-      gridProp: { xs: 4 },
-    },
-  ],
-  [
-    {
-      id: "bill_no",
-      label: "Bill Number",
-      type: STRING,
-      gridProp: { xs: 4 },
-      isRequired: true,
-    },
     {
       id: "date_of_purchase",
       label: "Date of Purchase",
       type: DATE,
-      gridProp: { xs: 4 },
+      gridProp: { xs: 6 },
     },
     {
       id: "incoming_date",
       label: "Incoming date",
       type: DATE,
-      gridProp: { xs: 4 },
+      gridProp: { xs: 6 },
     },
   ],
   [
@@ -42,19 +47,12 @@ export const columns = [
       gridProp: { xs: 4 },
       isRequired: true,
     },
-    {
-      id: "dealer_name",
-      label: "Dealer Name",
-      type: STRING,
-      gridProp: { xs: 4 },
-      isRequired: true,
-    },
   ],
   [
     {
       id: "products",
       label: "Products",
-      subLabelPrefix: "Product",
+      subLabelPrefix: "#",
       type: MULTIENTRY,
       gridProp: { xs: 12 },
       subcolumns: [
@@ -63,7 +61,6 @@ export const columns = [
             id: "product_type",
             label: "Type",
             type: STRING,
-            isRequired: true,
             gridProp: { xs: 4 },
           },
           {
@@ -104,7 +101,7 @@ export const columns = [
     {
       id: "other_expenses",
       label: "Other expenses",
-      subLabelPrefix: "Expense",
+      subLabelPrefix: "#",
       type: MULTIENTRY,
       gridProp: { xs: 12 },
       subcolumns: [
@@ -130,7 +127,7 @@ export const columns = [
     {
       id: "amt_paid",
       label: "Amount Paid",
-      subLabelPrefix: "Mode",
+      subLabelPrefix: "#",
       type: MULTIENTRY,
       gridProp: { xs: 12 },
       subcolumns: [

@@ -1,72 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  Grid,
+  DialogActions,
+  Button,
+} from "@material-ui/core";
+import { columns } from "./EntryMap";
+import EntryMapComp from "../../CompMap/CompMap";
 import { addSaleEntry } from "../../../redux/actions/sales";
 import { connect } from "react-redux";
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  TextField,
-  InputLabel,
-  Select,
-  MenuItem,
-  FormControl,
-  Typography,
-  Input,
-  Grid,
-} from "@material-ui/core";
-
-import AddProduct from "./AddProduct";
-import AddExpense from "./AddExpense";
-import { v4 as uuidv4 } from "uuid";
-import PropType from "prop-types";
 
 function AddEntry(props) {
-  var [mm, dd, yy] = new Date()
-    .toLocaleDateString()
-    .split("/")
-    .map((value) => (value.length === 1 ? `0${value}` : value));
-  const todayDate = `${yy}-${mm}-${dd}`;
-  console.log(todayDate);
-
-  const [state, setState] = React.useState({
-    bill_no: "",
-    date_of_purchase: todayDate,
-    dealer_name: "",
-    products: [],
-    other_expenses: [],
-    total: 0,
-    sales_type: "sell",
-  });
-
-  function textAreaChange(e) {
-    const value = e.target.value;
-    const name = e.target.name;
-    console.log(name);
-    setState({ ...state, [name]: value });
-  }
-
-  function onAddMultipleButtonClick(e) {
-    const name = e.currentTarget.name;
-    const values = state;
-    const id = uuidv4();
-    const value_to_insert = { id };
-
-    values[name].push(value_to_insert);
-    setState({ ...values });
-  }
-
-  function onMultiTextAreaChange({ type, index, value }) {
-    const values = [...state[type]];
-    values[index] = value;
-    setState({ ...state, [type]: values });
-  }
-
-  function onMultiRemoveClick({ type, id }) {
-    let values = [...state[type]];
-    values = values.filter((value) => value.id !== id);
-    setState({ ...state, [type]: values });
-  }
+  const [state, setState] = useState({ id: Date.now() });
+  const [error, changeError] = useState(0);
+  const [required_check, changeRequiredCheck] = useState(0);
 
   function onAddClick() {
     const data = { ...state };
@@ -74,168 +22,60 @@ function AddEntry(props) {
     props.onClose();
   }
 
-  function updateTotal(prevTotalValue, newTotalValue) {
-    state["total"] = state["total"] - prevTotalValue + newTotalValue;
-    setState({ ...state });
+  function setError(componentID) {
+    changeError((state) => state ^ componentID);
+  }
+
+  function setRequiredCheck(componentID) {
+    changeRequiredCheck((state) => state ^ componentID);
+  }
+
+  function onTextAreaChange(e) {
+    setState((state) => ({ ...state, [e.name]: e.value }));
   }
 
   return (
     <Dialog maxWidth="md" open={true} onClose={props.onClose}>
       <DialogContent>
         <Grid container spacing={2} direction="column">
-          <Grid item xs={4}>
-            <FormControl fullWidth>
-              <InputLabel>Select Entry type</InputLabel>
-              <Select
-                name="sales_type"
-                value={state.sales_type}
-                onChange={textAreaChange}
-              >
-                <MenuItem value={"sell"}>Sell</MenuItem>
-                <MenuItem value={"buy"}>Buy</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          {state.entrytype === "buy" && (
-            <Grid item xs={4} container>
-              <TextField
-                name="incoming_date"
-                label="Incoming date"
-                defaultValue={todayDate}
-                fullWidth
-                type="date"
-              />
+          {columns.map((column, index) => (
+            <Grid key={index} spacing={3} item container>
+              {column.map((subcol) => {
+                const { visibleOn } = subcol;
+                if (visibleOn && state[visibleOn.id] !== visibleOn.value) {
+                  return null;
+                } else {
+                  return (
+                    <Grid key={subcol.id} item xs={subcol.gridProp.xs}>
+                      <EntryMapComp
+                        {...subcol}
+                        setError={setError}
+                        setRequiredCheck={setRequiredCheck}
+                        onTextAreaChange={onTextAreaChange}
+                      />
+                    </Grid>
+                  );
+                }
+              })}
             </Grid>
-          )}
-
-          <Grid item xs={4} container>
-            <TextField name="dealer_name" fullWidth label="Dealer Name" />
-          </Grid>
-
-          <Grid item container spacing={3}>
-            <Grid item xs={4}>
-              <TextField
-                name="bill_no"
-                label="Bill No"
-                fullWidth
-                onChange={textAreaChange}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                name="date_of_purchase"
-                label="Date of purchase"
-                type="date"
-                fullWidth
-                defaultValue={state["date_of_purchase"]}
-                onChange={textAreaChange}
-              />
-            </Grid>
-          </Grid>
-
-          {/*---------Adding products---------*/}
-          <Grid item>
-            <Typography variant="h6" color="secondary">
-              PRODUCTS:
-            </Typography>
-          </Grid>
-          <Grid item container spacing={3}>
-            {state.products.map(({ id, ...values }, index) => (
-              <Grid item container key={id}>
-                <AddProduct
-                  index={index}
-                  id={id}
-                  values={{ ...values }}
-                  onChange={onMultiTextAreaChange}
-                  onRemoveClick={onMultiRemoveClick}
-                  updateTotal={updateTotal}
-                />
-              </Grid>
-            ))}
-          </Grid>
-
-          <Grid item>
-            <Button
-              variant="contained"
-              color="primary"
-              name="products"
-              onClick={onAddMultipleButtonClick}
-            >
-              Add a Product
-            </Button>
-          </Grid>
-
-          {/*-------------Adding expenses------------ */}
-
-          <Grid item>
-            <Typography variant="h6" color="secondary">
-              OTHER EXPENSES:
-            </Typography>
-          </Grid>
-
-          <Grid item container spacing={3}>
-            {state.other_expenses.map(({ id, ...values }, index) => (
-              <Grid item container key={id}>
-                <AddExpense
-                  index={index}
-                  id={id}
-                  values={{ ...values }}
-                  onChange={onMultiTextAreaChange}
-                  onRemoveClick={onMultiRemoveClick}
-                  updateTotal={updateTotal}
-                />
-              </Grid>
-            ))}
-          </Grid>
-
-          <Grid item>
-            <Button
-              variant="contained"
-              color="primary"
-              name="other_expenses"
-              onClick={onAddMultipleButtonClick}
-            >
-              Add Expense:
-            </Button>
-          </Grid>
-
-          {/*-------------Total value---------- */}
-
-          <Grid item>
-            <TextField
-              name="total"
-              label="Total"
-              disabled
-              value={state.total}
-            />
-          </Grid>
-          <Grid item>
-            <TextField
-              name="amt_paid"
-              label="Amount Paid"
-              onChange={textAreaChange}
-            />
-          </Grid>
-          <Grid item>
-            <TextField
-              name="remarks"
-              label="Remarks"
-              onChange={textAreaChange}
-            />
-          </Grid>
+          ))}
         </Grid>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={props.onClose}>Cancel</Button>
-        <Button onClick={onAddClick}>Add the entry</Button>
+      <DialogActions style={{ backgroundColor: "beige" }}>
+        <Button onClick={props.onClose} color="secondary">
+          Cancel
+        </Button>
+        <Button
+          onClick={onAddClick}
+          disabled={error !== 0 || required_check !== 0}
+          color="primary"
+        >
+          Add the entry
+        </Button>
       </DialogActions>
     </Dialog>
   );
 }
-
-AddEntry.propType = {
-  addSaleEntry: PropType.func,
-};
 
 const mapDispatchToProps = {
   addSaleEntry,

@@ -1,16 +1,7 @@
 import React, { useState } from "react";
-import {
-  Button,
-  Fab,
-  Select,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  AppBar,
-} from "@material-ui/core";
-import AddEntry from "./AddEntry/AddEntryNew";
+import { Fab } from "@material-ui/core";
+import AddEntry from "./AddEntry/AddEntry";
 import DisplayTable from "./Display/DisplayTable";
-import { InputMenuField } from "./AddEntry/CustomizedComp";
 import { Add } from "@material-ui/icons";
 
 export default function SellInfo() {
