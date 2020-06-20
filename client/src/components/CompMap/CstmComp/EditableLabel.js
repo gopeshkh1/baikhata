@@ -42,9 +42,13 @@ export default function EditableLabel(props) {
     setChecker({ ...checker, [type]: checker[type] ^ componentID });
   }
 
-  function toggleEdit() {
+  const toggleEdit = () => {
     setState({ ...state, editOpen: !state.editOpen });
-  }
+  };
+
+  // function toggleEdit() {
+  //   setState({ ...state, editOpen: !state.editOpen });
+  // }
 
   function onTextAreaChange(e) {
     setState({ ...state, newValue: e.value });

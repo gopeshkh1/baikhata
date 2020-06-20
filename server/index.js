@@ -1,4 +1,3 @@
-const bodyParser = require("body-parser");
 const cors = require("cors");
 const express = require("express");
 const path = require("path");
@@ -7,7 +6,7 @@ const app = express();
 
 //changes done
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
 app.get("/test", (req, res) => {
   res.end("hello from backend");
@@ -15,6 +14,9 @@ app.get("/test", (req, res) => {
 
 const sales = require("./routes/sales");
 app.use("/api/sales", sales);
+
+const stocks = require("./routes/stocks");
+app.use("/api/stocks", stocks);
 
 app.use(express.static("client/dist"));
 

@@ -3,7 +3,7 @@ import thunk from "redux-thunk";
 import rootReducer from "./reducers";
 import { composeWithDevTools } from "redux-devtools-extension";
 
-let initialValues = { sales: [] };
+let initialValues = { sales: [], stocks: [] };
 const middleware = [thunk];
 
 export default createStore(

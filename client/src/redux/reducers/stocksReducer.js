@@ -1,7 +1,10 @@
-import { ADD_SALE_ENTRY, FETCH_SALE_DATA } from "../actions/types";
+import { FETCH_STOCKS } from "../actions/types";
 
 function stockReducer(state = [], action) {
-  switch (action.type) {
+  const { type, payload } = action;
+  switch (type) {
+    case FETCH_STOCKS:
+      return [...payload];
     default:
       return state;
   }

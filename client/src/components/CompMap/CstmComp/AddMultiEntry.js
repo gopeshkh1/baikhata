@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Grid, Button, Typography } from "@material-ui/core";
-import { v4 as uuidv4 } from "uuid";
+// import { v4 as uuidv4 } from "uuid";
 import Form from "./Form";
 
 export default function AddMultiEntry(props) {
@@ -17,7 +17,9 @@ export default function AddMultiEntry(props) {
 
   function onClickAdd(e) {
     const values = [...state];
-    const id = uuidv4();
+
+    // const id = uuidv4();
+    const id = Date.now();
     const value_to_insert = { id };
 
     values.push(value_to_insert);
