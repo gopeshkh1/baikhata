@@ -1,5 +1,6 @@
 # baikhata
 A basic application to add a sale entry and reviewing the stocks changed.
+This app is made on node-express(backend) and react.js(frontend).
 
 ## Basic installation steps
 #### Install the npm packages
