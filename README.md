@@ -2,6 +2,8 @@
 A basic application to add a sale entry and reviewing the stocks changed.
 This app is made on node-express(backend) and react.js(frontend).The databse used is mysql.
 
+-----------------rebasing check
+
 ## Basic installation steps
 #### Install the npm packages
 npm install
