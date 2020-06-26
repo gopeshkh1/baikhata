@@ -2,11 +2,9 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Add } from "@material-ui/icons";
 
-function StockTable() {
-  const [state, setState] = useState({
-    openAdd: false
-  });
+//testing
 
+function StockTable() {
   const toggleDialog = () => {
     setState({ ...state, openAdd: !state.openAdd });
   };
