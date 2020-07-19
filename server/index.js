@@ -4,7 +4,9 @@ const path = require("path");
 
 const app = express();
 
-//changes done
+const { updateStocksOnStart } = require("./functions/stocks");
+updateStocksOnStart();
+
 app.use(cors());
 app.use(express.json());
 
@@ -18,11 +20,11 @@ app.use("/api/sales", sales);
 const stocks = require("./routes/stocks");
 app.use("/api/stocks", stocks);
 
-app.use(express.static("client/dist"));
+// app.use(express.static("client/dist"));
 
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "../", "client", "dist", "index.html"));
-});
+// app.get("*", (req, res) => {
+//   res.sendFile(path.resolve(__dirname, "../", "client", "dist", "index.html"));
+// });
 
 const port = process.env.PORT || 8000;
 app.listen(port, "0.0.0.0", (err, res) => {

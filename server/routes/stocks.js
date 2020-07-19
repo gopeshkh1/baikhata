@@ -16,5 +16,5 @@ router.get("/getStocks/:year/:month", async (req, res) => {
   res.send(result);
 });
 
-checkFileExists(new Date());
+// checkFileExists(new Date());
 module.exports = router;

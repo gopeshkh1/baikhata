@@ -4,8 +4,8 @@ const pool = require("../dbConn/db_pool");
 const dbTables = require("../dbConn/dbTables");
 const fs = require("fs");
 const path = require("path");
-const { addDayWiseStocks } = require("../functions/stocks");
 
+const { fetchSaleData, addSalesEntry } = require("../functions/sales");
 var rows = [
   {
     id: 1232435,
@@ -149,115 +149,41 @@ router.get("/fetchSaleData", async (req, res) => {
   res.send(result);
 });
 
-const fetchSaleData = async () => {
-  var [sales, products, other_expenses, amt_paid] = await Promise.all([
-    pool.query("select * from sales_entry"),
-    pool.query("select * from products_entry"),
-    pool.query("select * from expenses_entry"),
-    pool.query("select * from amt_paid")
-  ]);
-
-  sales = sales.map(sale => ({
-    ...sale,
-    ["products"]: [],
-    ["other_expenses"]: [],
-    ["amt_paid"]: []
-  }));
-  products.forEach(({ sales_id, ...args }) => {
-    const [sale] = sales.filter(sale => sale.id === sales_id);
-    // console.log("sale", sale);
-    sale["products"] = [...sale["products"], { ...args }];
-  });
-  other_expenses.forEach(({ sales_id, ...args }) => {
-    const [sale] = sales.filter(sale => sale.id === sales_id);
-    sale.other_expenses = [...sale.other_expenses, { ...args }];
-  });
-  amt_paid.forEach(({ sales_id, ...args }) => {
-    const [sale] = sales.filter(sale => sale.id === sales_id);
-    sale.amt_paid = [...sale.amt_paid, { ...args }];
-  });
-  return sales;
-  console.log(JSON.stringify(sales, null, 1));
-};
-
-fetchSaleData();
-
-router.post("/addSaleInfo", (req, res) => {
+router.post("/addSaleInfo", async (req, res) => {
   var values = req.body;
-  addSalesEntry(values);
-});
-
-const addSalesEntry = async values => {
-  var {
-    products,
-    other_expenses,
-    amt_paid,
-    id: sales_id,
-    date_of_purchase,
-    sales_type
-  } = values;
-  const connection = await pool.getTransactionalConn();
-  connection.beginTransaction();
   try {
-    await Promise.all([
-      insertIntoDB(connection, "sales", [values], sales_id),
-      insertIntoDB(connection, "products", products, sales_id),
-      insertIntoDB(connection, "other_expenses", other_expenses, sales_id),
-      insertIntoDB(connection, "amt_paid", amt_paid, sales_id)
-    ]);
-    await addDayWiseStocks(date_of_purchase, products, sales_type);
-    await connection.commit();
-    console.log("committed..");
+    await addSalesEntry(values);
+    res.send({ message: "success" });
   } catch (err) {
-    console.error(err);
-    connection.rollback();
-  } finally {
-    console.log("completed");
-    return;
+    res.send({ message: "error" + err });
   }
-};
-
-// addSalesEntry(rows[0]);
-const insertIntoDB = async (connection, type, values, sales_id) => {
-  const table = dbTables[type];
-
-  var valuesToInsert = values.map(value => {
-    const newValues = [];
-    value["sales_id"] = sales_id;
-    table.columns.forEach(key => {
-      newValues.push(value[key]);
-    });
-    return newValues;
-  });
-  await connection.query(`insert  into ${table.tableName} values ?`, [
-    valuesToInsert
-  ]);
-};
-
-router.put("/editEntry", (req, res) => {
-  let payload = req.body;
-
-  rows = [
-    ...rows.map(row => {
-      const { colId, subColId, rowId, subRowId, newValue } = payload;
-      if (row.id === rowId) {
-        const newRow = { ...row };
-        if (subColId !== null) {
-          newRow[colId] = newRow[colId].map(subrow =>
-            subrow.id === subRowId
-              ? { ...subrow, [subColId]: newValue }
-              : subrow
-          );
-        } else {
-          newRow[colId] = newValue;
-        }
-        console.log(newRow);
-        return newRow;
-      }
-      return row;
-    })
-  ];
-  res.send({ status: "success" });
+  // addDayWiseStocks(values);
 });
+
+// router.put("/editEntry", (req, res) => {
+//   let payload = req.body;
+//
+//   rows = [
+//     ...rows.map(row => {
+//       const { colId, subColId, rowId, subRowId, newValue } = payload;
+//       if (row.id === rowId) {
+//         const newRow = { ...row };
+//         if (subColId !== null) {
+//           newRow[colId] = newRow[colId].map(subrow =>
+//             subrow.id === subRowId
+//               ? { ...subrow, [subColId]: newValue }
+//               : subrow
+//           );
+//         } else {
+//           newRow[colId] = newValue;
+//         }
+//         console.log(newRow);
+//         return newRow;
+//       }
+//       return row;
+//     })
+//   ];
+//   res.send({ status: "success" });
+// });
 
 module.exports = router;

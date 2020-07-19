@@ -7,6 +7,10 @@ const {
   jsonReader,
   daysInMonth
 } = require("./common");
+const { fetchSaleData } = require("./sales");
+
+const STOCKSFOLDERPATH = path.join(__dirname, "../DayWiseStocks");
+const FILEFORLASTUPDATE = path.join(STOCKSFOLDERPATH, "lastUpdated");
 
 var loaded = {};
 var lockProducts = {};
@@ -14,11 +18,16 @@ var fileLockTimeout = {};
 var fileData = {};
 var locks = {};
 
-(async () => {
-  const lastUpdatefilePath = path.join(
-    __dirname,
-    "../DayWiseStocks/lastUpdated"
-  );
+const updateStocksOnStart = async () => {
+  if (!fs.existsSync(STOCKSFOLDERPATH)) {
+    const values = await fetchSaleData();
+    console.log(values);
+    await Promise.all(values.map(async value => await addDayWiseStocks(value)));
+    return;
+  }
+
+  const lastUpdatefilePath = FILEFORLASTUPDATE;
+
   fs.readFile(lastUpdatefilePath, "utf-8", async (err, lastUpdated) => {
     const todayDate = getTodayDate().join("-");
     if ((err && err.code === "ENOENT") || todayDate === lastUpdated) {
@@ -43,24 +52,24 @@ var locks = {};
       console.log("updated data");
     });
   });
-})();
+};
 
 const addLock = filePath => {
   locks[filePath] = true;
 };
 
-const rmProductsToAdd = filePath => {
+const rmFileFromLck = filePath => {
   delete lockProducts[filePath];
 };
 
-const addDayWiseStocks = async (date_of_purchase, products, sales_type) => {
+const addDayWiseStocks = async ({ date_of_purchase, products, sales_type }) => {
   const filePath = getFilePath(date_of_purchase);
   await loadFileData(date_of_purchase);
   await addLockProducts(filePath, date_of_purchase, products, sales_type);
 
   await jsonWriter(filePath, fileData[filePath]);
-  rmProductsToAdd(filePath);
-  // throw "Error";
+  rmFileFromLck(filePath);
+  throw "Error";
 };
 
 const addLockProducts = (filePath, date_of_purchase, products, sales_type) => {
@@ -94,14 +103,14 @@ const addLockProducts = (filePath, date_of_purchase, products, sales_type) => {
 
 const getFilePath = date_of_purchase => {
   const [yy, mm, dd] = date_of_purchase.split("-");
-  const dirpath = path.join(__dirname, "../DayWiseStocks", `${yy}`);
+  const dirpath = path.join(STOCKSFOLDERPATH, `${yy}`);
   const filePath = path.join(dirpath, `${mm}.json`);
   return filePath;
 };
 
 const getDirPath = date_of_purchase => {
   const [yy, mm, dd] = date_of_purchase.split("-");
-  const dirpath = path.join(__dirname, "../DayWiseStocks", `${yy}`);
+  const dirpath = path.join(STOCKSFOLDERPATH, `${yy}`);
   return dirpath;
 };
 
@@ -163,4 +172,4 @@ const loadFileData = async date => {
   }
 };
 
-module.exports = { addDayWiseStocks };
+module.exports = { addDayWiseStocks, updateStocksOnStart };
