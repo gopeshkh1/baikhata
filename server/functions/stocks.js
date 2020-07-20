@@ -7,7 +7,6 @@ const {
   jsonReader,
   daysInMonth
 } = require("./common");
-const { fetchSaleData } = require("./sales");
 
 const STOCKSFOLDERPATH = path.join(__dirname, "../DayWiseStocks");
 const FILEFORLASTUPDATE = path.join(STOCKSFOLDERPATH, "lastUpdated");
@@ -19,17 +18,20 @@ var fileData = {};
 var locks = {};
 
 const updateStocksOnStart = async () => {
+  const lastUpdatefilePath = FILEFORLASTUPDATE;
+  const todayDate = getTodayDate().join("-");
   if (!fs.existsSync(STOCKSFOLDERPATH)) {
+    const { fetchSaleData } = require("./sales");
     const values = await fetchSaleData();
-    console.log(values);
+    console.log(JSON.stringify(values, null, "\t"));
     await Promise.all(values.map(async value => await addDayWiseStocks(value)));
+    fs.writeFile(lastUpdatefilePath, todayDate, () => {
+      console.log("updated data");
+    });
     return;
   }
 
-  const lastUpdatefilePath = FILEFORLASTUPDATE;
-
   fs.readFile(lastUpdatefilePath, "utf-8", async (err, lastUpdated) => {
-    const todayDate = getTodayDate().join("-");
     if ((err && err.code === "ENOENT") || todayDate === lastUpdated) {
       return;
     }
@@ -69,7 +71,6 @@ const addDayWiseStocks = async ({ date_of_purchase, products, sales_type }) => {
 
   await jsonWriter(filePath, fileData[filePath]);
   rmFileFromLck(filePath);
-  throw "Error";
 };
 
 const addLockProducts = (filePath, date_of_purchase, products, sales_type) => {
@@ -94,7 +95,10 @@ const addLockProducts = (filePath, date_of_purchase, products, sales_type) => {
             ? fileData[filePath][datakey][dd] + quintals
             : quintals;
       else {
-        newValue = fileData[filePath][datakey][dd] - quintals;
+        newValue =
+          dd in fileData[filePath][datakey]
+            ? fileData[filePath][datakey][dd] - quintals
+            : -quintals;
       }
       await iterateData(datakey, date_of_purchase, newValue);
     })

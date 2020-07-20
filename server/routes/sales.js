@@ -8,141 +8,40 @@ const path = require("path");
 const { fetchSaleData, addSalesEntry } = require("../functions/sales");
 var rows = [
   {
-    id: 1232435,
-    sales_type: "buy",
-    bill_no: "1235",
-    date_of_purchase: "2020-05-12",
-    dalal_name: "titu",
-    dealer_name: "meena",
+    id: "159526742775",
+    sales_type: "sell",
+    bill_no: "1234",
+    date_of_purchase: "2020-07-20",
+    dalal_name: "jeff",
+    dealer_name: "joe",
     products: [
       {
-        id: 5959483,
-        product_type: "khanda",
-        product_name: "rajnigandh",
-        marka: 30,
-        quantity: 10,
-        quintals: 10,
-        rate: 2100
-      },
-      {
-        id: 3459182,
+        id: 1595267342930,
         product_type: "khanda",
         product_name: "rajnigandha",
         marka: 30,
         quantity: 10,
-        quintals: 100,
-        rate: 2100
+        quintals: 10.3,
+        rate: 100
       }
     ],
+    total_product_quantity: 10.3,
+    net_products_value: 1030,
     other_expenses: [
       {
-        id: 42744180,
-        expense_type: "Dalali",
+        id: 1595267401801,
+        expense_type: "dalali",
         expense_amt: 100
       }
     ],
-    amt_paid: [
-      {
-        id: 903503479,
-        amount: 0,
-        payment_mode: "",
-        details: ""
-      }
-    ],
-    total: 30000,
-    remarks: "add 5000 extra on recovery"
-  },
-  {
-    id: 1232436,
-    sales_type: "buy",
-    bill_no: "1235",
-    date_of_purchase: "2020-05-12",
-    dalal_name: "titu",
-    dealer_name: "meena",
-    products: [
-      {
-        id: 59594831,
-        product_type: "khanda",
-        product_name: "rajnigandh",
-        marka: 30,
-        quantity: 10,
-        quintals: 100,
-        rate: 2100
-      },
-      {
-        id: 34591821,
-        product_type: "khanda",
-        product_name: "rajnigandha",
-        marka: 30,
-        quantity: 10,
-        quintals: 100,
-        rate: 2100
-      }
-    ],
-    other_expenses: [
-      {
-        id: 427441801,
-        expense_type: "Dalali",
-        expense_amt: 100
-      }
-    ],
-    amt_paid: [
-      {
-        id: 903503478,
-        amount: 0,
-        payment_mode: "",
-        details: ""
-      }
-    ],
-    total: 30000,
-    remarks: "add 5000 extra on recovery"
-  },
-  {
-    id: 1232437,
-    sales_type: "buy",
-    bill_no: "1235",
-    date_of_purchase: "2020-06-12",
-    dalal_name: "titu",
-    dealer_name: "meena",
-    products: [
-      {
-        id: 59594832,
-        product_type: "khanda",
-        product_name: "rajnigandh",
-        marka: 30,
-        quantity: 10,
-        quintals: 100,
-        rate: 2100
-      },
-      {
-        id: 34591822,
-        product_type: "khanda",
-        product_name: "rajnigandha",
-        marka: 30,
-        quantity: 10,
-        quintals: 100,
-        rate: 2100
-      }
-    ],
-    other_expenses: [
-      {
-        id: 427441802,
-        expense_type: "Dalali",
-        expense_amt: 100
-      }
-    ],
-    amt_paid: [
-      {
-        id: 903503477,
-        amount: 0,
-        payment_mode: "",
-        details: ""
-      }
-    ],
-    total: 30000,
-    remarks: "add 5000 extra on recovery"
+    expenses_total: 1030,
+    amt_paid: [],
+    total: 2060,
+    remarks: "discount of 5%"
   }
 ];
+
+// addSalesEntry(rows[0]);
 
 router.get("/fetchSaleData", async (req, res) => {
   const result = await fetchSaleData();

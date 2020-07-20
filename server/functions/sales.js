@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const pool = require("../dbConn/db_pool");
-const dbTables = require("../dbConn/dbTables");
 const fs = require("fs");
 const path = require("path");
+
+const pool = require("../dbConn/db_pool");
+const dbTables = require("../dbConn/dbTables");
 
 //feches sales data from the database a return it in json format
 const fetchSaleData = async () => {
@@ -40,6 +41,7 @@ const fetchSaleData = async () => {
 const addSalesEntry = async values => {
   const connection = await pool.getTransactionalConn();
   connection.beginTransaction();
+  const { addDayWiseStocks } = require("./stocks.js");
   try {
     await addSalesEntryToDb(connection, values);
     await addDayWiseStocks(values);
@@ -70,6 +72,7 @@ const addSalesEntryToDb = async (connection, values) => {
 const insertIntoDB = async (connection, type, values, sales_id) => {
   const table = dbTables[type];
 
+  if (values.length === 0) return;
   var valuesToInsert = values.map(value => {
     const newValues = [];
     value["sales_id"] = sales_id;
@@ -78,7 +81,7 @@ const insertIntoDB = async (connection, type, values, sales_id) => {
     });
     return newValues;
   });
-  await connection.query(`insert  into ${table.tableName} values ?`, [
+  await connection.query(`insert into ${table.tableName} values ?`, [
     valuesToInsert
   ]);
 };
