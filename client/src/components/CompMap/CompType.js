@@ -5,3 +5,4 @@ export const SELECT = "select";
 export const DATE = "date";
 export const AUTOCOMPLETE = "autocomplete";
 export const MULTIENTRY = "multientry";
+export const LABEL = "label";

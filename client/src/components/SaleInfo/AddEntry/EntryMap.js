@@ -5,6 +5,7 @@ import {
   INT,
   FLOAT,
   MULTIENTRY,
+  LABEL
 } from "../../CompMap/CompType";
 
 export const columns = [
@@ -15,10 +16,10 @@ export const columns = [
       type: SELECT,
       list: [
         { id: "sell", label: "Sell" },
-        { id: "buy", label: "Buy" },
+        { id: "buy", label: "Buy" }
       ],
-      gridProp: { xs: 4 },
-    },
+      gridProp: { xs: 4 }
+    }
   ],
   [
     {
@@ -26,21 +27,21 @@ export const columns = [
       label: "Bill Number",
       type: STRING,
       gridProp: { xs: 4 },
-      isRequired: true,
+      isRequired: true
     },
     {
       id: "date_of_purchase",
       label: "Date of Purchase",
       type: DATE,
-      gridProp: { xs: 4 },
+      gridProp: { xs: 4 }
     },
     {
       id: "incoming_date",
       label: "Incoming date",
       type: DATE,
       visibleOn: { id: "sales_type", value: "buy" },
-      gridProp: { xs: 4 },
-    },
+      gridProp: { xs: 4 }
+    }
   ],
   [
     {
@@ -48,15 +49,15 @@ export const columns = [
       label: "Dalal Name",
       type: STRING,
       gridProp: { xs: 4 },
-      isRequired: true,
+      isRequired: true
     },
     {
       id: "dealer_name",
       label: "Dealer Name",
       type: STRING,
       gridProp: { xs: 4 },
-      isRequired: true,
-    },
+      isRequired: true
+    }
   ],
   [
     {
@@ -64,7 +65,7 @@ export const columns = [
       label: "Products",
       subLabelPrefix: "Product",
       type: MULTIENTRY,
-      gridProp: { xs: 12 },
+      gridProp: { xs: 10 },
       subcolumns: [
         [
           {
@@ -72,46 +73,79 @@ export const columns = [
             label: "Type",
             type: STRING,
             isRequired: true,
-            gridProp: { xs: 4 },
+            gridProp: { xs: 4 }
           },
           {
             id: "product_name",
             label: "Name",
             type: STRING,
             isRequired: true,
-            gridProp: { xs: 4 },
+            gridProp: { xs: 4 }
           },
           {
             id: "marka",
             label: "Marka",
             type: INT,
             gridProp: { xs: 4 },
-            isRequired: true,
+            isRequired: true
           },
           {
             id: "quantity",
             label: "Katti",
             type: INT,
             gridProp: { xs: 4 },
-            isRequired: true,
+            isRequired: true
           },
           {
             id: "quintals",
             label: "Quintals",
             type: FLOAT,
             gridProp: { xs: 4 },
-            isRequired: true,
+            isRequired: true
           },
           {
             id: "rate",
             label: "Rate",
             type: INT,
             gridProp: { xs: 4 },
-            isRequired: true,
-          },
-        ],
-      ],
+            isRequired: true
+          }
+        ]
+      ]
+    }
+  ],
+  [
+    {
+      id: "total_product_quantity",
+      label: "Total Quantity",
+      type: LABEL,
+      gridProp: { xs: 6 },
+      calDependency: ["products"],
+      calculation: ({ products = [] }) => {
+        const result = products.reduce(
+          (result, product) => (result = result + product.quintals),
+          0
+        );
+        // update({ name: "total_product_quantity", value: result });
+        return result;
+      }
     },
+    {
+      id: "net_products_value",
+      label: "Net Products Value",
+      type: LABEL,
+      gridProp: { xs: 6 },
+      calDependency: ["products"],
+      calculation: ({ products = [] }) => {
+        const result = products.reduce(
+          (result, product) =>
+            (result = result + product.rate * product.quintals),
+          0
+        );
+        // update({ name: "net_products_value", value: result });
+        return result;
+      }
+    }
   ],
   [
     {
@@ -119,26 +153,43 @@ export const columns = [
       label: "Other expenses",
       subLabelPrefix: "Expense",
       type: MULTIENTRY,
-      gridProp: { xs: 12 },
+      gridProp: { xs: 9 },
       subcolumns: [
         [
           {
             id: "expense_type",
             label: "Type",
             type: STRING,
-            gridProp: { xs: 4 },
+            gridProp: { xs: 4 }
           },
           {
             id: "expense_amt",
             label: "Amount",
             type: INT,
-            gridProp: { xs: 4 },
-          },
-        ],
-      ],
-    },
+            gridProp: { xs: 4 }
+          }
+        ]
+      ]
+    }
   ],
-
+  [
+    {
+      id: "expenses_total",
+      label: "Expenses total",
+      type: LABEL,
+      gridProp: { xs: 6 },
+      calDependency: ["total_product_quantity", "other_expenses"],
+      calculation: ({ total_product_quantity = 0, other_expenses = [] }) => {
+        const result = other_expenses.reduce(
+          (result, expense) =>
+            (result = result + total_product_quantity * expense.expense_amt),
+          0
+        );
+        // update({ name: "expenses_total", value: result });
+        return result;
+      }
+    }
+  ],
   [
     {
       id: "amt_paid",
@@ -152,24 +203,37 @@ export const columns = [
             id: "amount",
             label: "Amount",
             type: INT,
-            gridProp: { xs: 4 },
+            gridProp: { xs: 4 }
           },
           {
             id: "payment_mode",
             label: "Mode of payment",
             type: STRING,
-            gridProp: { xs: 4 },
+            gridProp: { xs: 4 }
           },
           {
             id: "details",
             label: "Details",
             type: STRING,
-            gridProp: { xs: 4 },
-          },
-        ],
-      ],
-    },
+            gridProp: { xs: 4 }
+          }
+        ]
+      ]
+    }
   ],
-  [{ id: "total", label: "Total", type: FLOAT, gridProp: { xs: 4 } }],
-  [{ id: "remarks", label: "Remarks", type: STRING, gridProp: { xs: 9 } }],
+  [
+    {
+      id: "total",
+      label: "Total",
+      type: LABEL,
+      gridProp: { xs: 6 },
+      calDependency: ["net_products_value", "expenses_total"],
+      calculation: ({ net_products_value = 0, expenses_total = 0 }) => {
+        const result = net_products_value + expenses_total;
+        // update({ name: "total", value: result });
+        return result;
+      }
+    }
+  ],
+  [{ id: "remarks", label: "Remarks", type: STRING, gridProp: { xs: 9 } }]
 ];

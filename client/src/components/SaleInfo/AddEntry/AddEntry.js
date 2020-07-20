@@ -4,11 +4,12 @@ import {
   DialogContent,
   Grid,
   DialogActions,
-  Button,
+  Button
 } from "@material-ui/core";
 import { columns } from "./EntryMap";
 import EntryMapComp from "../../CompMap/CompMap";
 import { addSaleEntry } from "../../../redux/actions/sales";
+import { changeFormData, clearFormData } from "../../../redux/actions/formdata";
 import { connect } from "react-redux";
 
 function AddEntry(props) {
@@ -17,21 +18,23 @@ function AddEntry(props) {
   const [required_check, changeRequiredCheck] = useState(0);
 
   function onAddClick() {
-    const data = { ...state };
+    // const data = { ...state };
+    const data = { id: Date.now(), ...props.formdata };
     props.addSaleEntry(data);
+    props.clearFormData();
     props.onClose();
   }
 
   function setError(componentID) {
-    changeError((state) => state ^ componentID);
+    changeError(state => state ^ componentID);
   }
 
   function setRequiredCheck(componentID) {
-    changeRequiredCheck((state) => state ^ componentID);
+    changeRequiredCheck(state => state ^ componentID);
   }
 
   function onTextAreaChange(e) {
-    setState((state) => ({ ...state, [e.name]: e.value }));
+    setState(state => ({ ...state, [e.name]: e.value }));
   }
 
   return (
@@ -40,7 +43,7 @@ function AddEntry(props) {
         <Grid container spacing={2} direction="column">
           {columns.map((column, index) => (
             <Grid key={index} spacing={3} item container>
-              {column.map((subcol) => {
+              {column.map(subcol => {
                 const { visibleOn } = subcol;
                 if (visibleOn && state[visibleOn.id] !== visibleOn.value) {
                   return null;
@@ -51,7 +54,7 @@ function AddEntry(props) {
                         {...subcol}
                         setError={setError}
                         setRequiredCheck={setRequiredCheck}
-                        onTextAreaChange={onTextAreaChange}
+                        onTextAreaChange={props.changeFormData}
                       />
                     </Grid>
                   );
@@ -77,8 +80,14 @@ function AddEntry(props) {
   );
 }
 
+const mapStateToProps = state => ({
+  formdata: state.formdata
+});
+
 const mapDispatchToProps = {
   addSaleEntry,
+  changeFormData,
+  clearFormData
 };
 
-export default connect(null, mapDispatchToProps)(AddEntry);
+export default connect(mapStateToProps, mapDispatchToProps)(AddEntry);

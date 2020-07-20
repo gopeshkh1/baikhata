@@ -1,15 +1,15 @@
 import { ADD_SALE_ENTRY, EDIT_SALE_ENTRY, FETCH_SALE_DATA } from "./types";
 import axios from "axios";
 
-export const addSaleEntry = (payload) => (dispatch) => {
+export const addSaleEntry = payload => dispatch => {
   try {
     axios
       .post("/api/sales/addSaleInfo", payload)
-      .then((res) => dispatch({ type: ADD_SALE_ENTRY, payload: res.data }));
+      .then(res => dispatch({ type: ADD_SALE_ENTRY, payload: payload }));
   } catch (err) {}
 };
 
-export const editSaleEntry = (payload) => async (dispatch) => {
+export const editSaleEntry = payload => async dispatch => {
   console.log("edit sale");
   try {
     var res = await axios.put("/api/sales/editEntry", payload);
@@ -21,7 +21,7 @@ export const editSaleEntry = (payload) => async (dispatch) => {
   }
 };
 
-export const fetchSaleData = () => async (dispatch) => {
+export const fetchSaleData = () => async dispatch => {
   console.log("fetchdata");
   try {
     var res = await axios.get("/api/sales/fetchSaleData");

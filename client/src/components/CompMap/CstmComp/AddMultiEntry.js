@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Grid, Button, Typography } from "@material-ui/core";
 // import { v4 as uuidv4 } from "uuid";
 import Form from "./Form";
@@ -9,15 +9,14 @@ export default function AddMultiEntry(props) {
 
   function setUpperCheck(values) {
     const { id, componentID, error, required_check } = values;
-    setComponentState((prevState) => ({
+    setComponentState(prevState => ({
       ...prevState,
-      [id]: { componentID, error, required_check },
+      [id]: { componentID, error, required_check }
     }));
   }
 
   function onClickAdd(e) {
     const values = [...state];
-
     // const id = uuidv4();
     const id = Date.now();
     const value_to_insert = { id };
@@ -28,7 +27,7 @@ export default function AddMultiEntry(props) {
 
   function onClickRemove(id, e) {
     var values = [...state];
-    values = values.filter((value) => value.id !== id);
+    values = values.filter(value => value.id !== id);
     setState([...values]);
 
     if (id in components) {
@@ -50,8 +49,11 @@ export default function AddMultiEntry(props) {
     var values = [...state];
     values[index][name] = value;
     setState([...values]);
-    props.onChange({ name: props.id, value: values });
   }
+
+  useEffect(() => {
+    props.onChange({ name: props.id, value: state });
+  }, [state]);
 
   return (
     <Grid container spacing={2} direction="column">

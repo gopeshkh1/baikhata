@@ -1,3 +1,4 @@
 node_modules/
 dist/
 DayWiseStocks/
+package-lock.json
