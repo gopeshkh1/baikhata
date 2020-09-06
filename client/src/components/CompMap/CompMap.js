@@ -41,7 +41,7 @@ function EntryMapComp(props) {
       return <Label {...props} />;
 
     case AUTOCOMPLETE:
-      return <AutoComplete />;
+      return <AutoComplete {...props} />;
 
     default:
       return <div></div>;

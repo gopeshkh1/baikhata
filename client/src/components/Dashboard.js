@@ -8,7 +8,8 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import SellInfo from "./SaleInfo/SellInfo";
 import BuyInfo from "./BuyInfo";
-import StocksLeft from "./StocksLeft";
+import StocksLeft from "./StocksInfo/StocksInfo";
+import { AutoComplete } from "./CompMap/CstmComp/CstmComp";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -28,24 +29,24 @@ function TabPanel(props) {
 TabPanel.propTypes = {
   children: PropTypes.node,
   index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired
 };
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.background.paper
   },
   appBar: {
     margin: "auto",
     width: "40%",
-    backgroundColor: "#272c34",
-  },
+    backgroundColor: "#272c34"
+  }
 }));
 
 const tabs = [
   { id: "sale_info", label: "Sale Info", component: <SellInfo /> },
-  { id: "stocks_info", label: "Stocks Info", component: <StocksLeft /> },
+  { id: "stocks_info", label: "Stocks Info", component: <StocksLeft /> }
 ];
 
 export default function Dashboard() {
@@ -58,9 +59,12 @@ export default function Dashboard() {
 
   return (
     <div className={classes.root}>
+      {
+        // <AutoComplete />
+      }
       <AppBar position="static" className={classes.appBar}>
         <Tabs value={value} onChange={handleChange} centered>
-          {tabs.map((tab) => (
+          {tabs.map(tab => (
             <Tab key={tab.id} label={tab.label} />
           ))}
         </Tabs>

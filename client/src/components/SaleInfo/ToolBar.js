@@ -7,33 +7,33 @@ import {
   TextField,
   Grid,
   Toolbar,
-  Typography,
+  Typography
 } from "@material-ui/core";
 
 import SearchIcon from "@material-ui/icons/Search";
 
 export default function ToolBar(props) {
-  const classes = makeStyles((theme) => ({
+  const classes = makeStyles(theme => ({
     search: {
       width: 240,
-      backgroundColor: fade(theme.palette.common.white, 0.15),
+      backgroundColor: fade(theme.palette.common.white, 0.15)
     },
 
     widthTransition: {
       transition: theme.transitions.create("width"),
       "&:hover, &:focus": {
         width: 270,
-        backgroundColor: fade(theme.palette.common.white, 0.25),
-      },
+        backgroundColor: fade(theme.palette.common.white, 0.25)
+      }
     },
     searchIcon: {
       padding: theme.spacing(1, 1, 1, 1),
       height: "100%",
-      position: "absolute",
+      position: "absolute"
     },
     inputRoot: {
       paddingLeft: 35,
-      color: "inherit",
+      color: "inherit"
     },
 
     inputInput: {
@@ -42,17 +42,17 @@ export default function ToolBar(props) {
       [theme.breakpoints.up("sm")]: {
         width: "12ch",
         "&:focus ,&:hover": {
-          width: "25ch",
-        },
-      },
-    },
+          width: "25ch"
+        }
+      }
+    }
   }))();
 
   const [state, setState] = useState({
-    sales_type: "sell",
+    sales_type: "sell"
   });
 
-  const onChange = (e) => {
+  const onChange = e => {
     const { name, value } = e.target;
     if (name === "sales_type") {
       setState({ ...state, [name]: value });

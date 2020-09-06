@@ -5,10 +5,11 @@ import {
   INT,
   FLOAT,
   MULTIENTRY,
-  LABEL
+  LABEL,
+  AUTOCOMPLETE
 } from "../../CompMap/CompType";
 
-export const columns = [
+export const rows = [
   [
     {
       id: "sales_type",
@@ -78,7 +79,7 @@ export const columns = [
           {
             id: "product_name",
             label: "Name",
-            type: STRING,
+            type: AUTOCOMPLETE,
             isRequired: true,
             gridProp: { xs: 4 }
           },

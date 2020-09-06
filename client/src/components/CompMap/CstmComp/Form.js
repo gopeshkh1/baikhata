@@ -9,7 +9,7 @@ export default function Form(props) {
     error: 0,
     required_check: 0,
     req_update: null,
-    error_update: null,
+    error_update: null
   });
 
   function setUpperCheck() {
@@ -17,12 +17,12 @@ export default function Form(props) {
       id: props.id,
       componentID: state.componentID,
       error: checker.error,
-      required_check: checker.required_check,
+      required_check: checker.required_check
     });
   }
 
   function setRequiredCheck(subComponentID) {
-    setChecker((prevState) => {
+    setChecker(prevState => {
       const required_check = prevState.required_check ^ subComponentID;
       var req_update = null ? false : prevState.req_update;
       if (required_check === 0 || prevState.required_check === 0)
@@ -40,7 +40,7 @@ export default function Form(props) {
   }, [checker.req_update]);
 
   function setError(subComponentID) {
-    setChecker((prevState) => {
+    setChecker(prevState => {
       const error = prevState.error ^ subComponentID;
       var error_update = null ? false : prevState.error_update;
       if (error === 0 || prevState.error === 0) error_update = !error_update;
@@ -58,7 +58,7 @@ export default function Form(props) {
 
   function onTextAreaChange(e) {
     const { name, value } = e;
-    setState((prevState) => ({ ...prevState, [name]: value }));
+    setState(prevState => ({ ...prevState, [name]: value }));
     props.onChange({ name, value });
   }
 
@@ -66,7 +66,7 @@ export default function Form(props) {
     <Grid container spacing={2} direction="column">
       {props.columns.map((column, index) => (
         <Grid key={index} spacing={3} item container>
-          {column.map((subcol) => (
+          {column.map(subcol => (
             <Grid
               key={subcol.id}
               item
